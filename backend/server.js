@@ -1,14 +1,27 @@
+//import dependecies
 const express = require('express');
-const { errorHandler } = require('./middleware/errorMiddleware');
 const dotenv = require('dotenv').config();
-const port = process.env.PORT || 8000;
+const { errorHandler } = require('./middleware/errorMiddleware');
+const connectDB = require('./connect/database');
 
-const app = express();
+//variabel per porten
+const port = process.env.PORT || 5000;
 
+connectDB();
+
+//inicializimi i express.js
+const app = express()
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }))
 
-app.use('/api/tasks', require('./routes/taskRoutes'));
+
+//routes
+app.use('/api/tasks', require('./routes/taskRoutes'))
+app.use('/api/users', require('./routes/userRoutes'))
+
 app.use(errorHandler);
+//pritesi i requesteve
+app.listen(port, () => console.log(`Server is running on port ${port}`))
 
-app.listen(port, () => console.log(`Server listening on ${port}`));
+
+
